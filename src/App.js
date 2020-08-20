@@ -1,28 +1,35 @@
 import React, { Component } from 'react';
 
 class App extends Component{
-  
-  render() {
-   
-    return (
-      <table>
-        <tr>
-          <Column />
-        </tr>
-      </table>
-    );
+  constructor(props){
+    super(props)
+    this.state = {
+      items: [],
+      isLoading: true
+    }
   }
-}
 
-class Column extends React.Component {
+  componentDidMount() {
+    fetch("https://jsonplaceholder.typicode.com/users")
+    .then(respons => respons.json())
+    .then(data => this.setState({items: data, isLoading: false}))
+  }
+ 
   render() {
+    const {items, isLoading} = this.state
+
+    if(isLoading) {
+      return <p>Loading.....</p>
+    }
     return (
-      <React.Fragment>
-        <td>Data satu</td>
-        <td>Data dua</td>
-        <td>Data tiga</td>
-      </React.Fragment>
-    )
+      <div >
+        <ul>
+           { items.map((item, index) => 
+            <li key={index} > {item.name} </li>
+           )}
+        </ul>
+      </div>
+    );
   }
 }
 
